@@ -1,10 +1,8 @@
 import pandas as pd
 import networkx as nx
 
-# 读取表格数据
 df = pd.read_csv('interactions.csv')
 
-# 解析相互作用信息
 interactions = []
 for row in df:
     parts = row.split('\t')
@@ -44,11 +42,9 @@ for row in df:
         'target': target_data
     })
 
-# 构建相互作用网络
 G = nx.DiGraph()
 
 for interaction in interactions:
-    # 使用相互作用起点和终点的氨基酸序号作为节点
     source_node = "{}:{}:{}".format(
         interaction['source']['chain_id'],
         interaction['source']['res_name'],
@@ -60,12 +56,10 @@ for interaction in interactions:
         interaction['target']['res_num']
     )
     
-    # 将相互作用的类型作为边的权重
     weight = interaction['interaction_type']
     
     G.add_edge(source_node, target_node, weight=weight)
 
-# 查找最短路径
 shortest_path = nx.shortest_path(G, source='A:THR:44', target='D:CYS:157')
 
 print(shortest_path)
